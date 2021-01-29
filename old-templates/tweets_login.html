@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Suche Tweets</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body{
+            background:#ddd;
+        }
+
+        .form-control-borderless {
+            border: none;
+        }
+
+        .form-control-borderless:hover, .form-control-borderless:active, .form-control-borderless:focus {
+            border: none;
+            outline: none;
+            box-shadow: none;
+        }
+
+        table, th, td {
+          border: 1px solid black;
+        }
+
+        #twits ARTICLE{
+            border: 1px #0c5460 solid;
+            margin-bottom: 10px;
+            padding: 15px;
+        }
+    </style>
+
+</head>
+<body>
+<div class="hero-head">
+            <nav class="navbar">
+                <div class="container"  >
+
+                    <div id="navbarMenuHeroA" class="navbar-menu">
+                        <div class="navbar-end">
+                            <a href="{{ url_for('index') }}" class="navbar-item">
+                                Home
+                            </a>
+                            {% if current_user.is_authenticated %}
+                            <a href="{{ url_for('index') }}" class="navbar-item">
+                                Profile
+                            </a>
+                            {% endif %}
+                            {% if not current_user.is_authenticated %}
+                            <a href="{{ url_for('login') }}" class="navbar-item">
+                                Login
+                            </a>
+                            <a href="{{ url_for('register') }}" class="navbar-item">
+                                Sign Up
+                            </a>
+                            {% endif %}
+                            {% if current_user.is_authenticated %}
+                            <a href="{{ url_for('logout') }}" class="navbar-item">
+                                Logout
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+<div class="container"><br>
+	<div class="row justify-content-center">
+        <div class="col-12 col-md-10 col-lg-8">
+            <form method="GET" action="/search" class="card card-sm">
+                <div class="card-body row no-gutters align-items-center">
+                    <div class="col-auto">
+                        <i class="fas fa-search h4 text-body"></i>
+                    </div>
+
+                    <div class="col">
+                        <input id="search" name="keyword" class="form-control form-control-lg form-control-borderless" type="search" placeholder="Search ">
+                    </div>
+
+                    <div class="col-auto">
+                        <input type="submit" name="search" value="search" class="btn btn-lg btn-success">
+                    </div>
+                </div>
+            </form>
+
+            <div class="twits-columns" id="twits"></div>
+        </div>
+    </div>
+
+    <br>
+    <form method ="POST" action="{{ url_for('store') }}">
+        <div class="col-auto">
+            <input type="hidden" name="search_result" value="{{ tweets }}">
+            <input type="submit" name="store" value="store(+)" class="btn btn-lg btn-success">
+        </div>
+    </form>
+
+    <div>
+        {{ table }}
+    </div>
+
+    {% if tweets %}
+    <div class="row justify-content-center">
+        {% if tweets|length > 0 %}
+            <table>
+            {% for item in tweets %}
+            <tr>
+                <td> {{ item['text'] }} </td>
+            </tr>
+            {% endfor %}
+            </table>
+        {% else %}
+            <h3>No tweets found</h3>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+
+
+</body>
+</html>

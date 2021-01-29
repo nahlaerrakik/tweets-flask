@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-10 col-lg-8">
+            <form method="GET" action="/search" class="card card-sm">
+                <div class="card-body row no-gutters align-items-center">
+                    <div class="col-auto">
+                        <i class="fas fa-search h4 text-body"></i>
+                    </div>
+
+                    <div class="col">
+                        <input id="keyword" name="keyword" class="form-control form-control-lg form-control-borderless" type="search" placeholder="Search #">
+                    </div>
+
+                    <div class="col-auto">
+                        <input type="submit" name="search" value="search" class="btn btn-lg btn-success">
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% if current_user.is_authenticated %}
+    <form method ="POST" action="{{ url_for('store') }}">
+        <div class="col-auto">
+            <input type="hidden" name="keyword" value="{{ keyword }}">
+            <input type="hidden" name="search_result" value={{ tweets }}>
+            <input type="submit" name="store" value="store(+)" class="btn btn-lg btn-success">
+        </div>
+    </form>
+    {% endif %}
+
+    <div>
+        {{ table }}
+    </div>
+
+    {% if tweets %}
+    <div class="row justify-content-center">
+        {% if tweets|length > 0 %}
+            <table>
+            {% for item in tweets %}
+            <tr>
+                <td> {{ item['text'] }} </td>
+            </tr>
+            {% endfor %}
+            </table>
+        {% else %}
+            <h3>No tweets found</h3>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}
